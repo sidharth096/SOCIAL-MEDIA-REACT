@@ -1,0 +1,16 @@
+.toastify-body {
+    background-color: #48c8ff !important; /* Use !important to override default styles */
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 12px;
+  }
+  
+  /* Customize the appearance of the toast close button */
+  .toastify-close-button {
+    color: #fff;
+    font-size: 14px;
+  }
+  
+  .toastify-message {
+    color: #ffffff; /* Change the text color to your desired color */
+  }

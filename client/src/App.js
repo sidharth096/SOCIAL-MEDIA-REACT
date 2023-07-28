@@ -1,7 +1,9 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
+import AdminLogin from "scenes/adminlogin";
 import ProfilePage from "scenes/profilePage";
+import AdminPanel from "scenes/adminPanel";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -28,6 +30,9 @@ function App() {
               path="/profile/:userId"
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
             />
+
+            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin/adminPanel" element={<AdminPanel />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

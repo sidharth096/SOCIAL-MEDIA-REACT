@@ -5,6 +5,8 @@ import App from "./App";
 import authReducer from "./state";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import {
   persistStore,
   persistReducer,
@@ -36,6 +38,7 @@ root.render(
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistStore(store)}>
         <App />
+        <ToastContainer />
       </PersistGate>
     </Provider>
   </React.StrictMode>
