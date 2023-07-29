@@ -10,10 +10,10 @@ export const adminLogin = async (req, res) => {
       if(email=="admin@gmail.com"&& password=="123"){
         const token = jwt.sign({ id:"admin_id" }, process.env.JWT_SECRET);
         
-        res.status(200).json({ token,msg:"success" });
+        res.status(200).json({login:true, token,msg:"success" });
       }
       else{
-        return res.status(400).json({ msg: "Invalid credentials. " });
+        return res.status(400).json({login:false, msg: "Invalid credentials. " });
       }
 
     
@@ -71,3 +71,25 @@ export const adminLogin = async (req, res) => {
       res.status(404).json({error:error.message})
     }
   }
+
+  /* SEARCH USER */
+export const searchUser = async (req, res) => {
+  console.log("bbbbbbbbbbb");
+  console.log(req.body);
+  try {
+    const searchTerm = req.body.searchterm; // Assuming the search term is sent from the frontend
+
+    // Perform the search operation on the User model using a regular expression
+    const regex = new RegExp(searchTerm, "i");
+    let users =await Users.find({
+      $or: [
+        { firstName: { $regex: searchTerm } }, // Case-insensitive search on the 'name' field
+        { email: { $regex: searchTerm } }, // Case-insensitive search on the 'email' field
+      ],
+    })
+     console.log(users,"users");
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -16,6 +16,11 @@ import {setAdminLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 
+import "./login.css";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
@@ -65,8 +70,9 @@ const Form = () => {
       body: JSON.stringify(values),
     });
     const loggedIn = await loggedInResponse.json();
+    console.log(loggedIn);
     onSubmitProps.resetForm();
-    if (loggedIn) {
+    if (loggedIn.login==true) {
       dispatch(
         setAdminLogin({
          
@@ -74,8 +80,22 @@ const Form = () => {
         })
       );
       navigate("/admin/adminPanel");
-    }
-  };  
+     }
+     else{
+      toast(loggedIn.msg, {
+        autoClose: 2000,
+        position: toast.POSITION.TOP_RIGHT,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        className: "toastify-body",
+        bodyClassName: "toastify-message",
+        closeButton: <span className="toastify-close-button">×</span>,
+      });
+     }
+    };  
+  
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     if (isLogin) await login(values, onSubmitProps);

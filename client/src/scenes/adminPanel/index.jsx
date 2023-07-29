@@ -5,17 +5,34 @@ import "react-toastify/dist/ReactToastify.css";
 import Form from "./Form";
 import {
   Box,
-  Typography,
-  useTheme,
-  useMediaQuery,
-  Modal,
   Button,
+  IconButton,
+  InputBase,
 } from "@mui/material";
 import Navbaradmin from "scenes/adminNavbar";
+import {Search} from "@mui/icons-material";
 
 const AdminPanel = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
+   
+  const [searchTerm,setSearchTerm] =useState("");
+
+  const handleSearch = async () => {
+    try {
+      console.log("Search term:", searchTerm);
+      let searchterm = searchTerm;
+      const response = await fetch("http://localhost:3001/admin/searchuser", {
+        method: "POST",
+        body: JSON.stringify({ searchterm }),
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {}
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -84,9 +101,6 @@ const AdminPanel = () => {
     } catch (error) {}
   };
 
-  const theme = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-
   const handleOpen = () => {
     setOpen(true);
   };
@@ -98,12 +112,20 @@ const AdminPanel = () => {
   return (
     <Box>
       <Navbaradmin />
-
-      <Box textAlign="center" mt={2}>
-        <Button variant="contained" color="primary" onClick={handleOpen}>
+      <Box display="flex" alignItems="center" justifyContent="space-between" mt={3} marginLeft={"370px"}>
+      <Box>
+        <Button variant="contained" color="primary" onClick={handleOpen} >
           Add user
         </Button>
       </Box>
+      <Box display="flex" alignItems="center" bgcolor="#f0f0f0" borderRadius="9px" ml={3}  marginRight={"380px"}>
+        {/* Adjust the ml (margin-left) value as needed */}
+        <InputBase type="text" placeholder="Search..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} sx={{flex:1}} />
+        <IconButton>
+          <Search  onClick={handleSearch}/>
+        </IconButton>
+      </Box>
+    </Box>
 
       <Box
         display="grid"
@@ -153,16 +175,11 @@ const AdminPanel = () => {
           </React.Fragment>
         ))}
       </Box>
-      <Box
-        // width={isNonMobileScreens ? "50%" : "93%"}
-        // p="2rem"
-        // m="2rem auto"
-        // borderRadius="1.5rem"
-        // backgroundColor={theme.palette.background.alt}
-      >
-       
 
-        <Form open={open} handleClose={handleClose} />
+      {/* Render the Form component as a child of Box to show the modal */}
+      <Box>
+      <Form open={open} handleClose={handleClose} setData={setData} setOpen={setOpen} />
+
       </Box>
     </Box>
   );

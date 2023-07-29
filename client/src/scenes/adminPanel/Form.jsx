@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Box, Button, TextField, Typography, useMediaQuery, Modal ,IconButton} from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, TextField, Typography, useMediaQuery, Modal, IconButton } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useTheme } from "@mui/material";
@@ -28,7 +28,7 @@ const initialValuesRegister = {
   picture: "",
 };
 
-const register = async (values, onSubmitProps) => {
+const register = async (values, onSubmitProps,setData,setOpen) => {
   console.log("vannu");
   // this allows us to send form info with image
   const formData = new FormData();
@@ -37,72 +37,75 @@ const register = async (values, onSubmitProps) => {
   }
   formData.append("picturePath", values.picture.name);
 
-  const savedUserResponse = await fetch(
-    "http://localhost:3001/auth/register",
-    {
-      method: "POST",
-      body: formData,
-    }
-  );
-  const savedUser = await savedUserResponse.json();
+  const savedUserResponse = await fetch("http://localhost:3001/auth/register", {
+    method: "POST",
+    body: formData,
+  });
+  console.log("kkkkk",savedUserResponse);
+  const response = await savedUserResponse.json();
+  console.log(response);
+  let users =response.users
+  console.log("sssss",users);
   onSubmitProps.resetForm();
-
+  setOpen(false);
+  setData(users)
   
- 
+  
+
+
+
 };
 
-const Form = ({ open, handleClose }) => {
+const Form = ({ open, handleClose,setData,setOpen }) => {
   const { palette } = useTheme();
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const [pageType, setPageType] = useState("login");
 
-  const handleFormSubmit = async (values,onSubmitProps) => {
-   await register(values, onSubmitProps);
+  const handleFormSubmit = async (values, onSubmitProps) => {
+    await register(values, onSubmitProps,setData,setOpen );
   };
+  const [modalStyle] = useState({
+    top: "50%",
+    left: "50%",
+    transform: "translate(120%, 0%)",
+    maxWidth: "580px",
+    width: "30%",
+    backgroundColor: "#fff",
+    padding: "3rem",
+    borderRadius: "8px",
+  });
 
   return (
-    
-      
-
-        <Formik
-          onSubmit={handleFormSubmit}
-          initialValues={initialValuesRegister}
-          validationSchema={registerSchema}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            handleBlur,
-            handleChange,
-            handleSubmit,
-            setFieldValue,
-            resetForm,
-          }) => (
-            <Modal open={open} onClose={handleClose}>
-              <Box 
-             display="flex"
-              alignItems="center"
-               justifyContent="center"
-       
-                sx={{ height: "100%" }}
-               >
-                  <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: "absolute",
-            top: "8px",
-            right: "8px",
-            color: palette.grey[500],
-          }}
-        >
-           
-          <CloseIcon />
-        </IconButton>
+    <Formik
+      onSubmit={handleFormSubmit}
+      initialValues={initialValuesRegister}
+      validationSchema={registerSchema}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        setFieldValue,
+        resetForm,
+      }) => (
+        <Modal open={open} onClose={handleClose}>
+          <Box sx={modalStyle}>
+            <IconButton
+              aria-label="close"
+              onClick={handleClose}
+              sx={{
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                color: palette.grey[500],
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
             <form onSubmit={handleSubmit}>
-            
-       
               <Box
                 display="grid"
                 gap="30px"
@@ -118,9 +121,7 @@ const Form = ({ open, handleClose }) => {
                     onChange={handleChange}
                     value={values.firstName}
                     name="firstName"
-                    error={
-                      Boolean(touched.firstName) && Boolean(errors.firstName)
-                    }
+                    error={Boolean(touched.firstName) && Boolean(errors.firstName)}
                     helperText={touched.firstName && errors.firstName}
                     sx={{ gridColumn: "span 2" }}
                   />
@@ -204,9 +205,8 @@ const Form = ({ open, handleClose }) => {
                 />
               </Box>
 
-              {/* BUTTONS */}
               <Box>
-                <Button
+                <Button 
                   fullWidth
                   type="submit"
                   sx={{
@@ -221,12 +221,10 @@ const Form = ({ open, handleClose }) => {
                 </Button>
               </Box>
             </form>
-            </Box>
-            </Modal>
-          )}
-        </Formik>
-     
-    
+          </Box>
+        </Modal>
+      )}
+    </Formik>
   );
 };
 

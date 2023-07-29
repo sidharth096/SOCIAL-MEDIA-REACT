@@ -24,6 +24,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { setMode, setLogout } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
+import { Avatar } from '@mui/material';
+import { AccountCircle } from '@mui/icons-material';
 
 const Navbar = () => {
   const [isMobileMenuToggled, setIsMobileMenuToggled] = useState(false);
@@ -70,7 +72,15 @@ const Navbar = () => {
               <Search />
             </IconButton>
           </FlexBetween>
+          
         )}
+            <FlexBetween
+            gap="1rem" // Adjust this value to control the gap between the elements
+            >
+               <Avatar>
+              <AccountCircle />
+             </Avatar>
+          </FlexBetween>
       </FlexBetween>
 
       {/* DESKTOP NAV */}
