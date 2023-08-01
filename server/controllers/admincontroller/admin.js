@@ -8,7 +8,8 @@ export const adminLogin = async (req, res) => {
       const { email, password } = req.body;
  
       if(email=="admin@gmail.com"&& password=="123"){
-        const token = jwt.sign({ id:"admin_id" }, process.env.JWT_SECRET);
+
+        const token = jwt.sign({ id:112233 }, process.env.JWT_SECRET);
         
         res.status(200).json({login:true, token,msg:"success" });
       }

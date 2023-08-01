@@ -51,7 +51,9 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({login:false, msg: "Invalid credentials. " });
     
     if(user.block == true) return res.status(400).json({login:false, msg: "User is Blocked"})
+  
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+ 
     delete user.password;
     res.status(200).json({ token, user });
   } catch (err) {

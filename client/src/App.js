@@ -14,6 +14,8 @@ function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
+  const isAdminAuth =Boolean(useSelector((state) => state.admintoken))
+
 
   return (
     <div className="app">
@@ -32,7 +34,7 @@ function App() {
             />
 
             <Route path="/admin" element={<AdminLogin />} />
-            <Route path="/admin/adminPanel" element={<AdminPanel />} />
+            <Route path="/admin/adminPanel" element={isAdminAuth ? <AdminPanel /> :<Navigate to= "/admin" />} />
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

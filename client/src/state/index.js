@@ -5,6 +5,7 @@ const initialState = {
   user: null,
   token: null,
   posts: [],
+  admintoken:null,
 };
 
 export const authSlice = createSlice({
@@ -40,10 +41,11 @@ export const authSlice = createSlice({
       state.posts = updatedPosts;
     },
     setAdminLogin:(state,action)=>{
+      console.log("vannu");
     
-      state.admintoken = action.payload.token;
+      state.admintoken = action.payload.admintoken;
     },
-    setAdminLogout: (state,action) => {
+    setAdminLogout: (state) => {
       state.admintoken = null;
     },
   },    
