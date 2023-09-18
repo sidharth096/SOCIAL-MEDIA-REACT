@@ -52,7 +52,7 @@ export const login = async (req, res) => {
     
     if(user.block == true) return res.status(400).json({login:false, msg: "User is Blocked"})
   
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{expiresIn:60});
  
     delete user.password;
     res.status(200).json({ token, user });

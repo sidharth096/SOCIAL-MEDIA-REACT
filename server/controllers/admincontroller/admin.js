@@ -9,7 +9,7 @@ export const adminLogin = async (req, res) => {
  
       if(email=="admin@gmail.com"&& password=="123"){
 
-        const token = jwt.sign({ id:112233 }, process.env.JWT_SECRET);
+        const token = jwt.sign({ id:112233 }, process.env.JWT_SECRET,{expiresIn:60});
         
         res.status(200).json({login:true, token,msg:"success" });
       }
@@ -84,8 +84,8 @@ export const searchUser = async (req, res) => {
     const regex = new RegExp(searchTerm, "i");
     let users =await Users.find({
       $or: [
-        { firstName: { $regex: searchTerm } }, // Case-insensitive search on the 'name' field
-        { email: { $regex: searchTerm } }, // Case-insensitive search on the 'email' field
+        { firstName: { $regex:`^${searchTerm}`  } }, // Case-insensitive search on the 'name' field
+        // { email: { $regex: searchTerm } }, // Case-insensitive search on the 'email' field
       ],
     })
      console.log(users,"users");

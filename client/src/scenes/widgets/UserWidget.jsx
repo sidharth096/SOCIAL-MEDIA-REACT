@@ -11,6 +11,8 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setLogout } from "state";
 
 const UserWidget = ({ userId, picturePath }) => {
   const [user, setUser] = useState(null);
@@ -20,6 +22,7 @@ const UserWidget = ({ userId, picturePath }) => {
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
+  const dispatch=useDispatch()
 
   const getUser = async () => {
     const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -27,7 +30,16 @@ const UserWidget = ({ userId, picturePath }) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    setUser(data);
+    if(data.error){
+      console.log("aaaaaaaaaa");
+      console.log(data.error);
+      dispatch(setLogout())
+      navigate('/')
+    }
+    else{
+      setUser(data);
+    }
+    
   };
 
   useEffect(() => {

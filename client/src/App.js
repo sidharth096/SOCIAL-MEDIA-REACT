@@ -23,7 +23,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Routes>
-            <Route path="/" element={<LoginPage />} />
+            <Route path="/" element={isAuth ?<HomePage />  :<LoginPage />} />
             <Route
               path="/home"
               element={isAuth ? <HomePage /> : <Navigate to="/" />}
@@ -33,7 +33,7 @@ function App() {
               element={isAuth ? <ProfilePage /> : <Navigate to="/" />}
             />
 
-            <Route path="/admin" element={<AdminLogin />} />
+            <Route path="/admin" element={isAdminAuth ? <AdminPanel /> :<AdminLogin />} />
             <Route path="/admin/adminPanel" element={isAdminAuth ? <AdminPanel /> :<Navigate to= "/admin" />} />
           </Routes>
         </ThemeProvider>
